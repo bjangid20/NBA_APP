@@ -1,24 +1,23 @@
-import logo from './logo.svg';
+import NbaApp from './modules/NbaApp';
+import { Button } from '@material-ui/core';
+import { SnackbarProvider } from 'notistack';
+import "./global.css";
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <SnackbarProvider
+      maxSnack={3}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right"
+      }}
+      action={<Button size="small">Dismiss</Button>}>
+      <div className="App">
+        <NbaApp />
+      </div >
+    </SnackbarProvider>
+
   );
 }
 
