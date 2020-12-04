@@ -7,7 +7,7 @@ import axios from 'axios'
 import store from '../store/store';
 import DialogComp from './components/DialogComp'
 import { fromDateAdded, fromDateRemoved, toDateAdded, toDateRemoved } from '../store/actions';
-import { errorHandler, warningHandler } from '../helpers/utility'
+import { errorHandler, warningHandler, dateTimeFormat } from '../helpers/utility'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +49,7 @@ const NbaApp = props => {
   const [data, setData] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [gameInfo, setGameInfo] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
   const [pageInfo, setPageInfo] = React.useState({
     pages: -1,
     page: 1,
@@ -100,17 +101,20 @@ const NbaApp = props => {
   };
 
   async function getUserAccount(isState) {
+    setLoading(true)
     const query = `&page=${isState.page + 1}&per_page=${isState.pageSize}`;
     await axios.get(`/api/v1/games?start_date=${dateState.fromDate}&end_date=${dateState.toDate}${query}`)
       .then((res) => {
         const persons = res.data;
         setData(persons.data);
+        setLoading(false)
         if (persons.data.length === 0) {
           warningHandler(enqueueSnackbar, 'No Data Available')
         }
         setPageInfo({ ...pageInfo, pages: persons.meta.total_pages, page: isState.page + 1, pageSize: isState.pageSize });
       }).catch((error) => {
         errorHandler(enqueueSnackbar, 'No Data Available')
+        setLoading(false)
         setData([]);
       });
   }
@@ -183,6 +187,7 @@ const NbaApp = props => {
           noDataText="No Data to show!"
           data={data}
           sortable={false}
+          loading={loading}
           defaultPageSize={pageInfo.defaultPageSize}
           style={{ display: "table", tableLayout: "fixed", width: "100%" }}
           manual
@@ -204,7 +209,7 @@ const NbaApp = props => {
               Header: 'Date',
               id: 'date',
               Cell: ({ original }) => (
-                original.date
+                original.date && dateTimeFormat(original.date)
               ),
               className: classes.table,
             },

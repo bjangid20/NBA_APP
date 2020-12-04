@@ -1,3 +1,7 @@
+import moment from "moment";
+
+export const dateTimeFormat = (date, format) => moment(date).format('lll');
+
 export const successHandler = (enqueueSnackbar, msg) => {
   let autoHideDuration = 3000;
   enqueueSnackbar(msg, {
