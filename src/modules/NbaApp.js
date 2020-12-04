@@ -15,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(4),
     padding: theme.spacing(4)
   },
+  dialogRoot: {
+    margin: theme.spacing(2),
+    padding: theme.spacing(2)
+  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -119,7 +123,7 @@ const NbaApp = props => {
       });
   }
 
-  const toOpenInfoTab = (id) => () => {
+  const toOpenInfoTab = (e, id) => {
     axios.get(`/api/v1/games/${id}`)
       .then((res) => {
         const persons = res.data;
@@ -143,10 +147,10 @@ const NbaApp = props => {
 
   return (
     <>
-      <Paper className={classes.root} elevation='5'>
+      <Paper className={classes.root} elevation={5}>
         <Typography variant='overline' className={classes.heading}>NBA APP</Typography>
       </Paper>
-      <Paper className={classes.root} elevation='5'>
+      <Paper className={classes.root} elevation={5}>
         <Grid container justify='flex-start' alignItems='center'>
           <Grid item xs={12} sm={12} lg={3} style={{ margin: 10 }}>
             <TextField
@@ -182,7 +186,7 @@ const NbaApp = props => {
           </Grid>
         </Grid>
       </Paper>
-      <Paper className={classes.root} elevation='5'>
+      <Paper className={classes.root} elevation={5}>
         <ReactTable
           noDataText="No Data to show!"
           data={data}
@@ -201,7 +205,7 @@ const NbaApp = props => {
               Header: 'ID',
               id: 'id',
               Cell: ({ original }) => (
-                <Button variant='outlined' onClick={() => toOpenInfoTab(original.id)}>{original.id}</Button>
+                <Button variant='outlined' onClick={(e) => toOpenInfoTab(e, original.id)}>{original.id}</Button>
               ),
               className: classes.table
             },
